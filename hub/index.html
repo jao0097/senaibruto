@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SENAI Esports</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root {
+  --bg: #0b0d12;
+  --bg2: #12151d;
+  --card: #171b25;
+  --line: #262b38;
+  --text: #eef0f5;
+  --muted: #8b92a5;
+  --red: #e30613;
+  --red2: #ff3341;
+  --ok: #2ecc71;
+  --gold: #ffc53d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, .brand, .btn { font-family: Rajdhani, Inter, sans-serif; letter-spacing: .02em; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+a { color: inherit; }
+img { display: block; max-width: 100%; }
+.hidden { display: none !important; }
+
+/* ---------- Marca ---------- */
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; white-space: nowrap; }
+.brand .logo {
+  width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; flex: none;
+  background: var(--red); font-size: 20px; color: #fff; transform: skewX(-8deg);
+  box-shadow: 0 0 18px rgba(227, 6, 19, .45);
+}
+.brand b { color: var(--red2); font-weight: 700; }
+
+/* ---------- Botões ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; padding: 0 24px; border-radius: 10px; font-weight: 700; font-size: 17px;
+  text-transform: uppercase; transition: transform .12s, background .15s, border-color .15s;
+}
+.btn:active { transform: scale(.97); }
+.btn-red { background: var(--red); color: #fff; box-shadow: 0 6px 20px rgba(227, 6, 19, .35); }
+.btn-red:hover { background: var(--red2); }
+.btn-ghost { background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .14); }
+.btn-ghost:hover { border-color: rgba(255, 255, 255, .4); }
+.btn svg { width: 18px; height: 18px; }
+
+/* ---------- Página de entrada ---------- */
+#welcome { position: relative; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: #000; }
+.w-art { position: absolute; inset: 0; }
+.w-art img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity 1.2s; transform: scale(1.04);
+}
+.w-art img.on { opacity: .55; animation: zoom 9s linear forwards; }
+@keyframes zoom { to { transform: scale(1.12); } }
+#welcome::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(900px 600px at 15% 100%, rgba(227, 6, 19, .25), transparent 70%), linear-gradient(90deg, rgba(5, 6, 10, .95) 0%, rgba(5, 6, 10, .6) 55%, rgba(5, 6, 10, .3) 100%);
+}
+.w-top, .w-main, .w-foot { position: relative; z-index: 1; }
+.w-top { padding: 24px 40px; }
+.w-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px 40px; max-width: 680px; }
+.w-main .kicker { display: inline-block; align-self: flex-start; background: var(--red); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 18px; }
+.w-main h1 { font-size: clamp(48px, 9vw, 96px); line-height: .9; margin-bottom: 18px; text-shadow: 0 6px 30px rgba(0,0,0,.5); }
+.w-main h1 b { color: var(--red2); }
+.w-main p { color: #d6dae3; font-size: 18px; margin-bottom: 30px; max-width: 520px; }
+.w-main .btn { height: 58px; padding: 0 44px; font-size: 22px; align-self: flex-start; }
+.w-count { color: var(--muted); font-size: 14px; margin-top: 16px; min-height: 21px; }
+.w-foot { padding: 20px 40px; color: var(--muted); font-size: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; }
+.w-foot a { color: #c9cdd8; }
+
+/* ---------- Topo ---------- */
+header {
+  position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 16px;
+  padding: 12px 24px; background: rgba(11, 13, 18, .85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+header .brand { cursor: pointer; }
+
+main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* ---------- Capa sem foto ---------- */
+.ph {
+  width: 100%; height: 100%; display: grid; place-items: center; text-align: center; padding: 16px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 14px, transparent 14px 28px),
+    radial-gradient(120% 120% at 20% 10%, var(--accent), #0b0d12 70%);
+}
+.ph span { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: clamp(28px, 6vw, 64px); line-height: .95; text-transform: uppercase; text-shadow: 0 4px 24px rgba(0,0,0,.5); }
+
+/* ---------- Destaque ---------- */
+.hero { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 16 / 7; min-height: 320px; border: 1px solid var(--line); background: #000; }
+.slide { position: absolute; inset: 0; opacity: 0; transition: opacity .8s; pointer-events: none; }
+.slide.on { opacity: 1; pointer-events: auto; }
+.slide > img, .slide > .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 7s ease-out; }
+.slide.on > img, .slide.on > .ph { transform: scale(1.08); }
+.slide > .ph span { opacity: .25; font-size: clamp(60px, 12vw, 160px); }
+.slide::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5, 6, 10, .92) 0%, rgba(5, 6, 10, .55) 45%, transparent 75%); }
+.slide .info { position: absolute; left: 40px; bottom: 40px; z-index: 1; max-width: 480px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.tag { font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; text-transform: uppercase; letter-spacing: .06em; background: rgba(8, 10, 15, .72); border: 1px solid rgba(255,255,255,.12); }
+.tag.red { background: var(--red); border-color: var(--red); color: #fff; }
+.tag.green { background: var(--ok); border-color: var(--ok); color: #062611; }
+.slide h2 { font-size: 56px; line-height: .95; margin-bottom: 12px; text-shadow: 0 4px 24px rgba(0,0,0,.5); }
+.slide p { color: #d6dae3; margin-bottom: 22px; }
+.slide .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.dots { position: absolute; right: 24px; bottom: 24px; z-index: 2; display: flex; gap: 8px; }
+.dots button { width: 10px; height: 10px; border-radius: 99px; background: rgba(255,255,255,.35); transition: width .25s, background .25s; }
+.dots button.on { width: 28px; background: #fff; }
+
+/* ---------- Biblioteca ---------- */
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 36px 0 16px; }
+.section-head h3 { font-size: 26px; }
+.section-head span { color: var(--muted); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.card {
+  position: relative; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  overflow: hidden; transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.card:hover { transform: translateY(-5px); border-color: var(--accent, var(--red)); box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+.card .thumb { position: relative; aspect-ratio: 16 / 9; overflow: hidden; }
+.card .thumb > img, .card .thumb > .ph { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.card:hover .thumb > img, .card:hover .thumb > .ph { transform: scale(1.06); }
+.card .thumb .tags { position: absolute; top: 12px; left: 12px; }
+.card .play-hint {
+  position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.35);
+  opacity: 0; transition: opacity .2s;
+}
+.card:hover .play-hint { opacity: 1; }
+.play-hint span { width: 64px; height: 64px; border-radius: 50%; background: var(--red); display: grid; place-items: center; box-shadow: 0 8px 30px rgba(227,6,19,.5); }
+.play-hint svg { width: 26px; height: 26px; margin-left: 4px; }
+.card .body { padding: 14px 16px 16px; }
+.card h4 { font-size: 24px; line-height: 1.1; }
+.card .meta { color: var(--muted); font-size: 13px; }
+.status { color: var(--muted); text-align: center; padding: 60px 16px; grid-column: 1 / -1; }
+
+footer.site { max-width: 1200px; margin: 0 auto; padding: 40px 24px 32px; color: var(--muted); font-size: 12px; text-align: center; }
+footer.site nav { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; }
+footer.site nav a { color: #c9cdd8; text-decoration: none; }
+footer.site nav a:hover { color: var(--text); text-decoration: underline; }
+footer.site p { max-width: 720px; margin: 0 auto 6px; }
+
+/* ---------- Janela do jogo ---------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, .75); backdrop-filter: blur(6px);
+  display: grid; place-items: center; padding: 16px; animation: fade .15s;
+}
+@keyframes fade { from { opacity: 0; } }
+.modal {
+  position: relative; width: 100%; max-width: 860px; max-height: calc(100vh - 32px); overflow: auto;
+  background: var(--card); border: 1px solid var(--line); border-radius: 20px; animation: pop .2s;
+}
+@keyframes pop { from { transform: translateY(12px) scale(.98); opacity: 0; } }
+.modal .cover { position: relative; aspect-ratio: 16 / 8; }
+.modal .cover > img, .modal .cover > .ph { width: 100%; height: 100%; object-fit: cover; }
+.modal .cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--card) 2%, transparent 50%); }
+.close {
+  position: absolute; top: 14px; right: 14px; z-index: 2; width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(0, 0, 0, .6); font-size: 22px; line-height: 1;
+}
+.close:hover { background: var(--red); }
+.modal .content { padding: 0 30px 30px; margin-top: -60px; position: relative; z-index: 1; }
+.modal h2 { font-size: 46px; line-height: 1; margin-bottom: 4px; }
+.modal .genre { color: var(--accent, var(--red2)); font-weight: 600; margin-bottom: 14px; }
+.modal .desc { color: #d0d4de; margin-bottom: 18px; white-space: pre-line; }
+.features { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px 18px; margin-bottom: 20px; }
+.features li { position: relative; padding-left: 18px; color: #d0d4de; font-size: 14px; }
+.features li::before { content: ""; position: absolute; left: 0; top: 8px; width: 7px; height: 7px; border-radius: 2px; background: var(--accent, var(--red)); transform: rotate(45deg); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.stat { background: var(--bg2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+.stat small { display: block; color: var(--muted); font-size: 12px; }
+.stat span { font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.modal h5 { font-family: Rajdhani, sans-serif; font-size: 18px; margin-bottom: 8px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.controls div { background: var(--bg2); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; font-size: 13px; color: var(--muted); }
+.controls kbd { font-family: inherit; font-weight: 700; color: var(--text); margin-right: 6px; }
+.notice { font-size: 13px; color: #c9cdd8; background: var(--bg2); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 8px; padding: 10px 12px; margin-bottom: 20px; }
+.modal .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.modal .actions .btn-red { min-width: 200px; }
+.modal .warn { font-size: 13px; color: var(--gold); }
+
+/* ---------- Tela de carregamento ---------- */
+#launch {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; text-align: center;
+  background: var(--bg); animation: fade .25s;
+}
+#launch .bg { position: absolute; inset: 0; opacity: .25; filter: blur(4px); }
+#launch .bg > img, #launch .bg > .ph { width: 100%; height: 100%; object-fit: cover; }
+#launch .box { position: relative; padding: 16px; }
+#launch h2 { font-size: 44px; margin-bottom: 4px; }
+#launch p { color: var(--muted); margin-bottom: 20px; }
+.bar { width: 260px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; margin: 0 auto; }
+.bar i { display: block; height: 100%; width: 0; background: var(--red); animation: load .9s ease-in forwards; }
+@keyframes load { to { width: 100%; } }
+
+@media (max-width: 640px) {
+  .w-top, .w-main, .w-foot { padding-left: 18px; padding-right: 18px; }
+  .w-main .btn { align-self: stretch; }
+  header { padding: 10px 16px; gap: 10px; }
+  .brand { font-size: 19px; }
+  main { padding: 16px; }
+  .hero { aspect-ratio: auto; min-height: 420px; }
+  .slide::after { background: linear-gradient(0deg, rgba(5, 6, 10, .95) 15%, transparent 75%); }
+  .slide .info { left: 18px; right: 18px; bottom: 44px; }
+  .slide h2 { font-size: 40px; }
+  .dots { left: 18px; right: auto; bottom: 18px; }
+  .grid { grid-template-columns: 1fr; }
+  .modal .content { padding: 0 18px 20px; margin-top: -40px; }
+  .modal h2 { font-size: 34px; }
+  .modal .actions .btn { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= ENTRADA ======================= -->
+<section id="welcome">
+  <div class="w-art" id="wArt"></div>
+  <div class="w-top"><div class="brand"><div class="logo">S</div><span>SENAI <b>Esports</b></span></div></div>
+  <div class="w-main">
+    <span class="kicker">Hub de jogos</span>
+    <h1>Jogue com a <b>sua turma.</b></h1>
+    <p>Os jogos criados pelos alunos, todos em um só lugar. Escolha um e comece a jogar no navegador.</p>
+    <button class="btn btn-red" id="enterBtn" type="button">Entrar</button>
+    <div class="w-count" id="wCount"></div>
+  </div>
+  <div class="w-foot">
+    <span>Projeto estudantil não oficial, sem vínculo com o SENAI ou a CNI.</span>
+    <a href="legal.html#termos">Termos de Uso</a>
+    <a href="legal.html#privacidade">Privacidade</a>
+  </div>
+</section>
+
+<!-- ======================= HUB ======================= -->
+<section id="hub" class="hidden">
+  <header>
+    <div class="brand" id="homeBtn" title="Voltar ao início"><div class="logo">S</div><span>SENAI <b>Esports</b></span></div>
+  </header>
+
+  <main>
+    <div class="hero" id="hero"></div>
+
+    <div class="section-head">
+      <h3>Jogos</h3>
+      <span id="libCount"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <footer class="site">
+    <nav>
+      <a href="legal.html#termos">Termos de Uso</a>
+      <a href="legal.html#privacidade">Política de Privacidade</a>
+    </nav>
+    <p>Projeto estudantil independente e sem fins lucrativos. Não é um site oficial do SENAI e não tem vínculo com o SENAI ou a CNI. As marcas citadas pertencem aos seus titulares.</p>
+    <p>Cada jogo pertence aos seus criadores. Jogos hospedados em outros sites seguem as regras e a política de privacidade desses sites.</p>
+  </footer>
+</section>
+
+<!-- ======================= JANELA DO JOGO ======================= -->
+<div class="overlay hidden" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="close" id="mClose" type="button" aria-label="Fechar">&times;</button>
+    <div class="cover" id="mCover"></div>
+    <div class="content">
+      <div class="tags" id="mTags"></div>
+      <h2 id="mTitle"></h2>
+      <div class="genre" id="mGenre"></div>
+      <p class="desc" id="mDesc"></p>
+      <ul class="features" id="mFeatures"></ul>
+      <div class="stats" id="mStats"></div>
+      <div id="mControlsWrap">
+        <h5>Controles</h5>
+        <div class="controls" id="mControls"></div>
+      </div>
+      <p class="notice hidden" id="mExternal"></p>
+      <div class="actions">
+        <button class="btn btn-red" id="mPlay" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>Jogar</button>
+        <button class="btn btn-ghost" id="mBack" type="button">Voltar</button>
+        <span class="warn" id="mWarn"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= CARREGANDO ======================= -->
+<div id="launch" class="hidden">
+  <div class="bg" id="lBg"></div>
+  <div class="box">
+    <h2 id="lTitle"></h2>
+    <p id="lText">Abrindo o jogo...</p>
+    <div class="bar"><i></i></div>
+  </div>
+</div>
+
+<script src="games.js"></script>
+<script>
+// A lista de jogos fica em games.js (constante GAMES).
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const PLAY_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>';
+const safeColor = c => /^#[0-9a-f]{6}$/i.test(c || '') ? c : '#e30613';
+const coverHtml = (g, alt = '') => g.img
+  ? `<img src="${esc(g.img)}" alt="${esc(alt)}">`
+  : `<div class="ph" style="--accent:${safeColor(g.accent)}"><span>${esc(g.title)}</span></div>`;
+const hostOf = url => { try { const u = new URL(url, location.href); return u.origin === location.origin ? '' : u.host; } catch { return ''; } };
+const tagsHtml = g => (g.tags || []).map(([t, c]) => `<span class="tag ${c === 'green' || c === 'red' ? c : ''}">${esc(t)}</span>`).join('');
+let openGame = null, slide = 0, slideTimer = null, artTimer = null;
+
+// Versões antigas do hub tinham contas salvas no navegador; não são mais usadas.
+try { localStorage.removeItem('senai_users'); localStorage.removeItem('senai_session'); } catch {}
+
+// ---------- Entrada ----------
+function startArt() {
+  const art = $('wArt');
+  if (!art.children.length) GAMES.filter(g => g.img).forEach(g => { const i = new Image(); i.src = g.img; i.alt = ''; art.appendChild(i); });
+  const imgs = [...art.children];
+  if (!imgs.length) return;
+  let i = 0;
+  const step = () => { imgs.forEach((im, k) => im.classList.toggle('on', k === i)); i = (i + 1) % imgs.length; };
+  step(); clearInterval(artTimer); artTimer = setInterval(step, 7000);
+}
+
+function showHub() {
+  try { sessionStorage.setItem('entered', '1'); } catch {}
+  clearInterval(artTimer);
+  $('welcome').classList.add('hidden');
+  $('hub').classList.remove('hidden');
+  window.scrollTo(0, 0);
+  renderHero();
+}
+function showWelcome() {
+  try { sessionStorage.removeItem('entered'); } catch {}
+  closeGame(); clearInterval(slideTimer);
+  $('hub').classList.add('hidden');
+  $('welcome').classList.remove('hidden');
+  startArt();
+}
+$('enterBtn').onclick = showHub;
+$('homeBtn').onclick = showWelcome;
+
+// ---------- Hub ----------
+function renderHero() {
+  const hero = $('hero');
+  if (!GAMES.length) { hero.classList.add('hidden'); return; }
+  hero.classList.remove('hidden');
+  hero.innerHTML = GAMES.map((g, i) => `
+    <div class="slide" data-i="${i}">
+      ${coverHtml(g)}
+      <div class="info">
+        <div class="tags"><span class="tag red">Destaque</span>${tagsHtml(g)}</div>
+        <h2>${esc(g.title)}</h2>
+        <p>${esc(g.short)}</p>
+        <div class="actions">
+          <button class="btn btn-red" type="button" data-play="${i}">${PLAY_ICON}Jogar</button>
+          <button class="btn btn-ghost" type="button" data-info="${i}">Ver detalhes</button>
+        </div>
+      </div>
+    </div>`).join('') +
+    `<div class="dots">${GAMES.map((g, i) => `<button type="button" aria-label="${esc(g.title)}" data-dot="${i}"></button>`).join('')}</div>`;
+  hero.querySelectorAll('[data-play]').forEach(b => b.onclick = () => play(GAMES[b.dataset.play]));
+  hero.querySelectorAll('[data-info]').forEach(b => b.onclick = () => showGame(GAMES[b.dataset.info]));
+  hero.querySelectorAll('[data-dot]').forEach(b => b.onclick = () => { goSlide(+b.dataset.dot); autoSlide(); });
+  goSlide(slide);
+  autoSlide();
+}
+function goSlide(i) {
+  if (!GAMES.length) return;
+  slide = (i + GAMES.length) % GAMES.length;
+  $('hero').querySelectorAll('.slide').forEach((s, k) => s.classList.toggle('on', k === slide));
+  $('hero').querySelectorAll('[data-dot]').forEach((d, k) => d.classList.toggle('on', k === slide));
+}
+function autoSlide() { clearInterval(slideTimer); if (GAMES.length > 1) slideTimer = setInterval(() => goSlide(slide + 1), 7000); }
+
+function renderGrid() {
+  $('libCount').textContent = GAMES.length === 1 ? '1 jogo disponível' : GAMES.length + ' jogos disponíveis';
+  if (!GAMES.length) { $('grid').innerHTML = '<div class="status">Nenhum jogo cadastrado ainda.</div>'; return; }
+  $('grid').innerHTML = GAMES.map((g, i) => `
+    <button class="card" type="button" data-i="${i}" style="--accent:${safeColor(g.accent)}">
+      <div class="thumb">
+        ${coverHtml(g, g.title)}
+        <div class="tags">${tagsHtml(g)}</div>
+        <div class="play-hint"><span>${PLAY_ICON}</span></div>
+      </div>
+      <div class="body"><h4>${esc(g.title)}</h4><div class="meta">${esc(g.genre)}</div></div>
+    </button>`).join('');
+  $('grid').querySelectorAll('.card').forEach(c => c.onclick = () => showGame(GAMES[c.dataset.i]));
+}
+
+// ---------- Janela do jogo ----------
+function showGame(g) {
+  openGame = g;
+  document.querySelector('#overlay .modal').style.setProperty('--accent', safeColor(g.accent));
+  $('mCover').innerHTML = coverHtml(g, g.title);
+  $('mTags').innerHTML = tagsHtml(g);
+  $('mTitle').textContent = g.title;
+  $('mGenre').textContent = g.genre || '';
+  $('mDesc').textContent = g.desc || g.short || '';
+  const features = g.features || [], controls = g.controls || [];
+  $('mFeatures').innerHTML = features.map(f => `<li>${esc(f)}</li>`).join('');
+  $('mFeatures').classList.toggle('hidden', !features.length);
+  const host = hostOf(g.url);
+  const stats = [...(g.stats || []), ['Endereço', host || 'Neste site']];
+  $('mStats').innerHTML = stats.map(([k, v]) => `<div class="stat"><small>${esc(k)}</small><span title="${esc(v)}">${esc(v)}</span></div>`).join('');
+  $('mControls').innerHTML = controls.map(([k, v]) => `<div><kbd>${esc(k)}</kbd>${esc(v)}</div>`).join('');
+  $('mControlsWrap').classList.toggle('hidden', !controls.length);
+  $('mExternal').classList.toggle('hidden', !host);
+  $('mExternal').innerHTML = host ? `Este jogo fica em outro site (<b>${esc(host)}</b>). Ao jogar, você sai do SENAI Esports e passa a seguir as regras e a política de privacidade daquele site.` : '';
+  $('mWarn').textContent = g.warn || '';
+  $('overlay').classList.remove('hidden');
+  document.querySelector('#overlay .modal').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  clearInterval(slideTimer);
+  $('mPlay').focus();
+}
+function closeGame() {
+  if (!openGame) return;
+  openGame = null; $('overlay').classList.add('hidden'); document.body.style.overflow = '';
+  if (!$('hub').classList.contains('hidden')) autoSlide();
+}
+
+// Mostra a tela de carregamento e vai para o jogo.
+function play(g) {
+  const host = hostOf(g.url);
+  $('lBg').innerHTML = coverHtml(g);
+  $('lTitle').textContent = g.title;
+  $('lText').textContent = host ? `Abrindo ${host}...` : 'Abrindo o jogo...';
+  $('launch').classList.remove('hidden');
+  setTimeout(() => { window.location.href = g.url; }, 900);
+}
+
+$('mPlay').onclick = () => openGame && play(openGame);
+$('mClose').onclick = closeGame;
+$('mBack').onclick = closeGame;
+$('overlay').onclick = e => { if (e.target === $('overlay')) closeGame(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGame(); });
+
+// Ao voltar do jogo pelo botão "voltar" do navegador, a página pode vir do cache.
+window.addEventListener('pageshow', () => $('launch').classList.add('hidden'));
+
+// ---------- Início ----------
+$('wCount').textContent = GAMES.length ? `${GAMES.length} ${GAMES.length === 1 ? 'jogo disponível' : 'jogos disponíveis'}` : '';
+renderGrid();
+
+let entered = false;
+try { entered = sessionStorage.getItem('entered') === '1'; } catch {}
+if (entered) showHub(); else startArt();
+</script>
+</body>
+</html>
